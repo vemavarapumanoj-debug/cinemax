@@ -834,52 +834,81 @@ body {
   font-size: 13px;
 }
 
-/* Hover overlay */
+/* ============================= */
+/* CINEMATIC MOVIE HOVER EFFECT */
+/* ============================= */
 
-.movie-card::after {
-  content: "VIEW DETAILS  →";
+.movie-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
 
-  position: absolute;
-
-  left: 50%;
-  top: 42%;
-
-  transform:
-    translate(-50%, -50%)
-    translateY(15px);
-
-  padding: 11px 16px;
-
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 6px;
-
-  background: rgba(0, 0, 0, 0.75);
-
-  color: white;
-
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-
-  opacity: 0;
+  background: #101010;
+  border: 1px solid #242424;
+  border-radius: 12px;
 
   transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-
-  pointer-events: none;
-}
-
-.movie-card:hover::after {
-  opacity: 1;
-
-  transform:
-    translate(-50%, -50%)
-    translateY(0);
+    transform 0.4s ease,
+    box-shadow 0.4s ease,
+    border-color 0.4s ease;
 }
 
 .movie-card:hover {
-  transform: translateY(-8px) scale(1.01);
+  transform: translateY(-8px) scale(1.015);
+
+  border-color: #e50914;
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.7);
+}
+
+.movie-card img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+
+  display: block;
+
+  object-fit: cover;
+
+  transition:
+    transform 0.6s ease,
+    filter 0.6s ease;
+}
+
+.movie-card:hover img {
+  transform: scale(1.08);
+
+  filter: brightness(0.75);
+}
+
+/* Cinematic red glow */
+
+.movie-card::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 1;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(229, 9, 20, 0.18),
+      transparent 45%,
+      rgba(0, 0, 0, 0.35)
+    );
+
+  opacity: 0;
+
+  transition: opacity 0.5s ease;
+}
+
+.movie-card:hover::before {
+  opacity: 1;
 }
 
 /* MOBILE */
@@ -1213,5 +1242,193 @@ body {
     flex: 1;
 
     justify-content: center;
+  }
+}
+/* =========================
+   MOBILE RESPONSIVE DESIGN
+   ========================= */
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 15px;
+  }
+
+  .logo {
+    font-size: 22px;
+  }
+
+  .search-bar {
+    order: 3;
+    width: 100%;
+    max-width: none;
+  }
+
+  .nav-actions {
+    margin-left: auto;
+    gap: 8px;
+  }
+
+  .favorites-nav-button,
+  .back-button {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .genres-container,
+  .movies-container {
+    padding: 30px 15px;
+  }
+
+  .genres-container h2,
+  .movies-container h2 {
+    font-size: 28px;
+  }
+
+  .genre-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .genre-card {
+    min-height: 100px;
+    padding: 15px;
+  }
+
+  .movie-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .movie-card {
+    width: 100%;
+  }
+
+  .movie-info h4 {
+    font-size: 14px;
+  }
+
+  .movie-meta {
+    font-size: 12px;
+  }
+
+  .poster-wrapper img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+  }
+
+  .card-favorite-button {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  /* Movie details */
+
+  .details-container {
+    grid-template-columns: 1fr;
+    padding: 25px 15px;
+    gap: 25px;
+  }
+
+  .details-poster {
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  .details-content h1 {
+    font-size: 32px;
+  }
+
+  .details-meta {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .cast-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .cast-card img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+  }
+
+  .director-list {
+    grid-template-columns: 1fr;
+  }
+
+  /* Intro */
+
+  .intro-content {
+    padding: 20px;
+  }
+
+  .intro-content h1 {
+    font-size: 48px;
+  }
+
+  .quote {
+    font-size: 16px;
+  }
+
+  .tagline {
+    font-size: 15px;
+  }
+
+  .intro-buttons {
+    flex-direction: column;
+    width: 100%;
+    max-width: 280px;
+    margin: 25px auto 0;
+  }
+
+  .intro-buttons button {
+    width: 100%;
+  }
+}
+
+/* Smaller phones */
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 12px;
+  }
+
+  .nav-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .genre-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .movie-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .genres-container h2,
+  .movies-container h2 {
+    font-size: 24px;
+  }
+
+  .details-content h1 {
+    font-size: 27px;
+  }
+
+  .cast-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .intro-content h1 {
+    font-size: 40px;
   }
 }
