@@ -24,6 +24,60 @@ const genres = [
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
+function Navbar({
+  backPage = "genres",
+  backText = "← Genres",
+  favorites,
+  setPage,
+  searchQuery,
+  setSearchQuery,
+  handleSearch,
+}) {
+  return (
+    <header className="navbar">
+      <div
+        className="logo"
+        onClick={() => setPage("intro")}
+        style={{ cursor: "pointer" }}
+      >
+        CINEMAX
+      </div>
+
+      <form className="search-bar" onSubmit={handleSearch}>
+        <input
+          type="text"
+          placeholder="Search movies..."
+          value={searchQuery}
+          onChange={(event) =>
+            setSearchQuery(event.target.value)
+          }
+        />
+
+        <button type="submit">🔍</button>
+      </form>
+
+      <div className="nav-actions">
+        {favorites.length > 0 && (
+          <button
+            className="favorites-nav-button"
+            onClick={() => setPage("favorites")}
+          >
+            ❤️ Favorites
+            <span>{favorites.length}</span>
+          </button>
+        )}
+
+        <button
+          className="back-button"
+          onClick={() => setPage(backPage)}
+        >
+          {backText}
+        </button>
+      </div>
+    </header>
+  );
+}
+
 function App() {
   const [page, setPage] = useState("intro");
   const [selectedGenre, setSelectedGenre] = useState(null);
@@ -205,48 +259,6 @@ function App() {
     );
   }
 
-  // =========================
-  // NAVBAR
-  // =========================
-
-  function Navbar({ backPage = "genres", backText = "← Genres" }) {
-    return (
-      <header className="navbar">
-        <div className="logo">CINEMAX</div>
-
-        <form className="search-bar" onSubmit={handleSearch}>
-          <input
-            type="text"
-            placeholder="Search movies..."
-            value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
-          />
-
-          <button type="submit">🔍</button>
-        </form>
-
-        <div className="nav-actions">
-          {/* FAVORITES BUTTON ONLY APPEARS AFTER AT LEAST ONE FAVORITE */}
-          {favorites.length > 0 && (
-            <button
-              className="favorites-nav-button"
-              onClick={() => setPage("favorites")}
-            >
-              ❤️ Favorites
-              <span>{favorites.length}</span>
-            </button>
-          )}
-
-          <button
-            className="back-button"
-            onClick={() => setPage(backPage)}
-          >
-            {backText}
-          </button>
-        </div>
-      </header>
-    );
-  }
 
   // =========================
   // GENRES
@@ -255,7 +267,15 @@ function App() {
   if (page === "genres") {
     return (
       <div className="genres-page">
-        <Navbar backPage="intro" backText="← Intro" />
+        <Navbar
+  backPage="intro"
+  backText="← Intro"
+  favorites={favorites}
+  setPage={setPage}
+  searchQuery={searchQuery}
+  setSearchQuery={setSearchQuery}
+  handleSearch={handleSearch}
+/>
 
         <main className="genres-container">
           <p className="section-label">WELCOME TO CINEMAX</p>
@@ -293,7 +313,13 @@ function App() {
   if (page === "movies") {
     return (
       <div className="movies-page">
-        <Navbar />
+        <Navbar
+  favorites={favorites}
+  setPage={setPage}
+  searchQuery={searchQuery}
+  setSearchQuery={setSearchQuery}
+  handleSearch={handleSearch}
+/>
 
         <main className="movies-container">
           <p className="section-label">
@@ -364,12 +390,41 @@ function App() {
   if (page === "search") {
     return (
       <div className="movies-page">
-        <Navbar />
+        <Navbar
+  favorites={favorites}
+  setPage={setPage}
+  searchQuery={searchQuery}
+  setSearchQuery={setSearchQuery}
+  handleSearch={handleSearch}
+/>
 
         <main className="movies-container">
-          <p className="section-label">SEARCH</p>
+          <p className="section-label">SEARCH RESULTS</p>
 
-          <h2>Results for "{searchQuery}"</h2>
+<div className="search-results-heading">
+  <div>
+    <h2>Results for "{searchQuery}"</h2>
+
+    {!searchLoading && !searchError && searchResults.length > 0 && (
+      <p className="search-result-count">
+        Found {searchResults.length} movie
+        {searchResults.length === 1 ? "" : "s"}
+      </p>
+    )}
+  </div>
+
+  {searchQuery && (
+    <button
+      className="clear-search-button"
+      onClick={() => {
+        setSearchQuery("");
+        setSearchResults([]);
+      }}
+    >
+      ✕ Clear
+    </button>
+  )}
+</div>
 
           {searchLoading && (
             <div className="coming-message">
@@ -499,8 +554,25 @@ function App() {
 
   if (page === "details") {
     return (
-      <div className="details-page">
-        <Navbar backPage="movies" backText="← Back to Movies" />
+      <div
+  className="details-page"
+  style={
+    movieDetails?.backdrop_path
+      ? {
+          "--movie-backdrop": `url(https://image.tmdb.org/t/p/original${movieDetails.backdrop_path})`,
+        }
+      : {}
+  }
+>
+        <Navbar
+  backPage="movies"
+  backText="← Back to Movies"
+  favorites={favorites}
+  setPage={setPage}
+  searchQuery={searchQuery}
+  setSearchQuery={setSearchQuery}
+  handleSearch={handleSearch}
+/>
 
         {detailsLoading && (
           <div className="details-loading">
@@ -706,5 +778,6 @@ function MovieCard({
     </div>
   );
 }
+
 
 export default App;
