@@ -641,6 +641,25 @@ function App() {
                   ? "❤️ In Favorites"
                   : "♡ Add to Favorites"}
               </button>
+              {(() => {
+  const trailer = movieDetails.videos?.results?.find(
+    (video) =>
+      video.site === "YouTube" &&
+      video.type === "Trailer" &&
+      video.key
+  );
+
+  return trailer ? (
+    <a
+      className="watch-trailer-button"
+      href={`https://www.youtube.com/watch?v=${trailer.key}`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      ▶ WATCH TRAILER
+    </a>
+  ) : null;
+})()}
 
               <h2>About the Movie</h2>
 

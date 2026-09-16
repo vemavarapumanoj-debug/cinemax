@@ -46,7 +46,7 @@ export async function getMoviesByGenre(genreId, type = "released") {
 export async function getMovieDetails(movieId) {
   const url =
     `${TMDB_BASE_URL}/movie/${movieId}` +
-    `?append_to_response=credits` +
+    `?append_to_response=credits,videos` +
     `&language=en-US`;
 
   const response = await fetch(url, {
@@ -60,8 +60,7 @@ export async function getMovieDetails(movieId) {
   }
 
   return await response.json();
-}
-export async function searchMovies(query) {
+}export async function searchMovies(query) {
   const url =
     `${TMDB_BASE_URL}/search/movie` +
     `?query=${encodeURIComponent(query)}` +
