@@ -24,6 +24,10 @@ const genres = [
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
+// =========================
+// NAVBAR
+// =========================
+
 function Navbar({
   backPage = "genres",
   backText = "← Genres",
@@ -78,6 +82,10 @@ function Navbar({
   );
 }
 
+// =========================
+// APP
+// =========================
+
 function App() {
   const [page, setPage] = useState("intro");
   const [selectedGenre, setSelectedGenre] = useState(null);
@@ -106,6 +114,10 @@ function App() {
     }
   });
 
+  // =========================
+  // SAVE FAVORITES
+  // =========================
+
   useEffect(() => {
     localStorage.setItem(
       "cinemax-favorites",
@@ -130,8 +142,14 @@ function App() {
   }
 
   function isFavorite(movieId) {
-    return favorites.some((movie) => movie.id === movieId);
+    return favorites.some(
+      (movie) => movie.id === movieId
+    );
   }
+
+  // =========================
+  // SEARCH
+  // =========================
 
   async function handleSearch(event) {
     event.preventDefault();
@@ -161,6 +179,10 @@ function App() {
     }
   }
 
+  // =========================
+  // LOAD MOVIES
+  // =========================
+
   useEffect(() => {
     if (page !== "movies" || !selectedGenre) return;
 
@@ -170,8 +192,14 @@ function App() {
         setError("");
 
         const [released, upcoming] = await Promise.all([
-          getMoviesByGenre(selectedGenre.id, "released"),
-          getMoviesByGenre(selectedGenre.id, "upcoming"),
+          getMoviesByGenre(
+            selectedGenre.id,
+            "released"
+          ),
+          getMoviesByGenre(
+            selectedGenre.id,
+            "upcoming"
+          ),
         ]);
 
         setReleasedMovies(
@@ -196,6 +224,10 @@ function App() {
     loadMovies();
   }, [page, selectedGenre]);
 
+  // =========================
+  // MOVIE DETAILS
+  // =========================
+
   async function openMovieDetails(movie) {
     try {
       setSelectedMovie(movie);
@@ -205,6 +237,7 @@ function App() {
       setPage("details");
 
       const details = await getMovieDetails(movie.id);
+
       setMovieDetails(details);
     } catch (err) {
       console.error(err);
@@ -259,7 +292,6 @@ function App() {
     );
   }
 
-
   // =========================
   // GENRES
   // =========================
@@ -268,22 +300,25 @@ function App() {
     return (
       <div className="genres-page">
         <Navbar
-  backPage="intro"
-  backText="← Intro"
-  favorites={favorites}
-  setPage={setPage}
-  searchQuery={searchQuery}
-  setSearchQuery={setSearchQuery}
-  handleSearch={handleSearch}
-/>
+          backPage="intro"
+          backText="← Intro"
+          favorites={favorites}
+          setPage={setPage}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          handleSearch={handleSearch}
+        />
 
         <main className="genres-container">
-          <p className="section-label">WELCOME TO CINEMAX</p>
+          <p className="section-label">
+            WELCOME TO CINEMAX
+          </p>
 
           <h2>What do you want to watch?</h2>
 
           <p className="genre-description">
-            Choose a genre and discover movies that match your mood.
+            Choose a genre and discover movies that match
+            your mood.
           </p>
 
           <div className="genre-grid">
@@ -314,19 +349,21 @@ function App() {
     return (
       <div className="movies-page">
         <Navbar
-  favorites={favorites}
-  setPage={setPage}
-  searchQuery={searchQuery}
-  setSearchQuery={setSearchQuery}
-  handleSearch={handleSearch}
-/>
+          favorites={favorites}
+          setPage={setPage}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          handleSearch={handleSearch}
+        />
 
         <main className="movies-container">
           <p className="section-label">
             {selectedGenre?.name.toUpperCase()}
           </p>
 
-          <h2>{selectedGenre?.name} Movies</h2>
+          <h2>
+            {selectedGenre?.name} Movies
+          </h2>
 
           {loading && (
             <div className="coming-message">
@@ -338,7 +375,9 @@ function App() {
           {error && (
             <div className="coming-message">
               <div>⚠️</div>
+
               <h3>Something went wrong</h3>
+
               <p>{error}</p>
             </div>
           )}
@@ -355,7 +394,9 @@ function App() {
                       movie={movie}
                       onOpen={openMovieDetails}
                       isFavorite={isFavorite(movie.id)}
-                      onToggleFavorite={toggleFavorite}
+                      onToggleFavorite={
+                        toggleFavorite
+                      }
                     />
                   ))}
                 </div>
@@ -371,7 +412,9 @@ function App() {
                       movie={movie}
                       onOpen={openMovieDetails}
                       isFavorite={isFavorite(movie.id)}
-                      onToggleFavorite={toggleFavorite}
+                      onToggleFavorite={
+                        toggleFavorite
+                      }
                     />
                   ))}
                 </div>
@@ -391,40 +434,48 @@ function App() {
     return (
       <div className="movies-page">
         <Navbar
-  favorites={favorites}
-  setPage={setPage}
-  searchQuery={searchQuery}
-  setSearchQuery={setSearchQuery}
-  handleSearch={handleSearch}
-/>
+          favorites={favorites}
+          setPage={setPage}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          handleSearch={handleSearch}
+        />
 
         <main className="movies-container">
-          <p className="section-label">SEARCH RESULTS</p>
+          <p className="section-label">
+            SEARCH RESULTS
+          </p>
 
-<div className="search-results-heading">
-  <div>
-    <h2>Results for "{searchQuery}"</h2>
+          <div className="search-results-heading">
+            <div>
+              <h2>
+                Results for "{searchQuery}"
+              </h2>
 
-    {!searchLoading && !searchError && searchResults.length > 0 && (
-      <p className="search-result-count">
-        Found {searchResults.length} movie
-        {searchResults.length === 1 ? "" : "s"}
-      </p>
-    )}
-  </div>
+              {!searchLoading &&
+                !searchError &&
+                searchResults.length > 0 && (
+                  <p className="search-result-count">
+                    Found {searchResults.length} movie
+                    {searchResults.length === 1
+                      ? ""
+                      : "s"}
+                  </p>
+                )}
+            </div>
 
-  {searchQuery && (
-    <button
-      className="clear-search-button"
-      onClick={() => {
-        setSearchQuery("");
-        setSearchResults([]);
-      }}
-    >
-      ✕ Clear
-    </button>
-  )}
-</div>
+            {searchQuery && (
+              <button
+                className="clear-search-button"
+                onClick={() => {
+                  setSearchQuery("");
+                  setSearchResults([]);
+                }}
+              >
+                ✕ Clear
+              </button>
+            )}
+          </div>
 
           {searchLoading && (
             <div className="coming-message">
@@ -447,7 +498,9 @@ function App() {
               <div className="coming-message">
                 <div>🎬</div>
                 <h3>No movies found</h3>
-                <p>Try another movie title.</p>
+                <p>
+                  Try another movie title.
+                </p>
               </div>
             )}
 
@@ -461,7 +514,9 @@ function App() {
                     movie={movie}
                     onOpen={openMovieDetails}
                     isFavorite={isFavorite(movie.id)}
-                    onToggleFavorite={toggleFavorite}
+                    onToggleFavorite={
+                      toggleFavorite
+                    }
                   />
                 ))}
               </div>
@@ -479,17 +534,26 @@ function App() {
     return (
       <div className="movies-page favorites-page">
         <header className="navbar">
-          <div className="logo">CINEMAX</div>
+          <div className="logo">
+            CINEMAX
+          </div>
 
-          <form className="search-bar" onSubmit={handleSearch}>
+          <form
+            className="search-bar"
+            onSubmit={handleSearch}
+          >
             <input
               type="text"
               placeholder="Search movies..."
               value={searchQuery}
-              onChange={(event) => setSearchQuery(event.target.value)}
+              onChange={(event) =>
+                setSearchQuery(event.target.value)
+              }
             />
 
-            <button type="submit">🔍</button>
+            <button type="submit">
+              🔍
+            </button>
           </form>
 
           <button
@@ -501,7 +565,9 @@ function App() {
         </header>
 
         <main className="movies-container">
-          <p className="section-label">YOUR COLLECTION</p>
+          <p className="section-label">
+            YOUR COLLECTION
+          </p>
 
           <h2>❤️ Favorite Movies</h2>
 
@@ -509,18 +575,25 @@ function App() {
             {favorites.length === 0
               ? "Your favorite movies will appear here."
               : `${favorites.length} movie${
-                  favorites.length === 1 ? "" : "s"
+                  favorites.length === 1
+                    ? ""
+                    : "s"
                 } saved in your collection.`}
           </p>
 
           {favorites.length === 0 ? (
             <div className="empty-favorites">
-              <div className="empty-heart">❤️</div>
+              <div className="empty-heart">
+                ❤️
+              </div>
 
-              <h3>Your collection is empty</h3>
+              <h3>
+                Your collection is empty
+              </h3>
 
               <p>
-                Browse movies and tap the heart to save your favorites.
+                Browse movies and tap the heart
+                to save your favorites.
               </p>
 
               <button
@@ -538,7 +611,9 @@ function App() {
                   movie={movie}
                   onOpen={openMovieDetails}
                   isFavorite={true}
-                  onToggleFavorite={toggleFavorite}
+                  onToggleFavorite={
+                    toggleFavorite
+                  }
                 />
               ))}
             </div>
@@ -555,29 +630,31 @@ function App() {
   if (page === "details") {
     return (
       <div
-  className="details-page"
-  style={
-    movieDetails?.backdrop_path
-      ? {
-          "--movie-backdrop": `url(https://image.tmdb.org/t/p/original${movieDetails.backdrop_path})`,
+        className="details-page"
+        style={
+          movieDetails?.backdrop_path
+            ? {
+                "--movie-backdrop": `url(https://image.tmdb.org/t/p/original${movieDetails.backdrop_path})`,
+              }
+            : {}
         }
-      : {}
-  }
->
+      >
         <Navbar
-  backPage="movies"
-  backText="← Back to Movies"
-  favorites={favorites}
-  setPage={setPage}
-  searchQuery={searchQuery}
-  setSearchQuery={setSearchQuery}
-  handleSearch={handleSearch}
-/>
+          backPage="movies"
+          backText="← Back to Movies"
+          favorites={favorites}
+          setPage={setPage}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          handleSearch={handleSearch}
+        />
 
         {detailsLoading && (
           <div className="details-loading">
             <div>🎬</div>
-            <h2>Loading movie details...</h2>
+            <h2>
+              Loading movie details...
+            </h2>
           </div>
         )}
 
@@ -603,7 +680,9 @@ function App() {
                   .join(" • ")}
               </p>
 
-              <h1>{movieDetails.title}</h1>
+              <h1>
+                {movieDetails.title}
+              </h1>
 
               {movieDetails.tagline && (
                 <p className="details-tagline">
@@ -615,12 +694,16 @@ function App() {
                 <span>
                   ⭐{" "}
                   {movieDetails.vote_average
-                    ? movieDetails.vote_average.toFixed(1)
+                    ? movieDetails.vote_average.toFixed(
+                        1
+                      )
                     : "N/A"}
                 </span>
 
                 <span>
-                  📅 {movieDetails.release_date || "Unknown"}
+                  📅{" "}
+                  {movieDetails.release_date ||
+                    "Unknown"}
                 </span>
 
                 <span>
@@ -633,47 +716,61 @@ function App() {
 
               <button
                 className={`details-favorite-button ${
-                  isFavorite(movieDetails.id) ? "active" : ""
+                  isFavorite(movieDetails.id)
+                    ? "active"
+                    : ""
                 }`}
-                onClick={() => toggleFavorite(movieDetails)}
+                onClick={() =>
+                  toggleFavorite(movieDetails)
+                }
               >
                 {isFavorite(movieDetails.id)
                   ? "❤️ In Favorites"
                   : "♡ Add to Favorites"}
               </button>
+
               {(() => {
-  const trailer = movieDetails.videos?.results?.find(
-    (video) =>
-      video.site === "YouTube" &&
-      video.type === "Trailer" &&
-      video.key
-  );
+                const trailer =
+                  movieDetails.videos?.results?.find(
+                    (video) =>
+                      video.site === "YouTube" &&
+                      video.type === "Trailer" &&
+                      video.key
+                  );
 
-  return trailer ? (
-    <a
-      className="watch-trailer-button"
-      href={`https://www.youtube.com/watch?v=${trailer.key}`}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      ▶ WATCH TRAILER
-    </a>
-  ) : null;
-})()}
+                return trailer ? (
+                  <a
+                    className="watch-trailer-button"
+                    href={`https://www.youtube.com/watch?v=${trailer.key}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    ▶ WATCH TRAILER
+                  </a>
+                ) : null;
+              })()}
 
-              <h2>About the Movie</h2>
+              <h2>
+                About the Movie
+              </h2>
 
               <p className="overview">
-                {movieDetails.overview || "No overview available."}
+                {movieDetails.overview ||
+                  "No overview available."}
               </p>
 
-              <h2>Cast & Crew</h2>
+              <h2>
+                Cast & Crew
+              </h2>
 
               <div className="cast-list">
                 {movieDetails.credits?.cast
                   ?.slice(0, 8)
                   .map((person) => (
-                    <div className="cast-card" key={person.id}>
+                    <div
+                      className="cast-card"
+                      key={person.id}
+                    >
                       {person.profile_path ? (
                         <img
                           src={`${IMAGE_BASE_URL}${person.profile_path}`}
@@ -685,21 +782,27 @@ function App() {
                         </div>
                       )}
 
-                      <strong>{person.name}</strong>
+                      <strong>
+                        {person.name}
+                      </strong>
 
                       <small>
-                        {person.character || "Cast"}
+                        {person.character ||
+                          "Cast"}
                       </small>
                     </div>
                   ))}
               </div>
 
-              <h2>Director</h2>
+              <h2>
+                Director
+              </h2>
 
               <div className="director-list">
                 {movieDetails.credits?.crew
                   ?.filter(
-                    (person) => person.job === "Director"
+                    (person) =>
+                      person.job === "Director"
                   )
                   .slice(0, 3)
                   .map((director) => (
@@ -719,8 +822,13 @@ function App() {
                       )}
 
                       <div>
-                        <strong>{director.name}</strong>
-                        <small>Director</small>
+                        <strong>
+                          {director.name}
+                        </strong>
+
+                        <small>
+                          Director
+                        </small>
                       </div>
                     </div>
                   ))}
@@ -745,15 +853,48 @@ function MovieCard({
   isFavorite,
   onToggleFavorite,
 }) {
+  // NEW:
+  // Used for the mobile touch effect.
+  const [touching, setTouching] = useState(false);
+
   function handleFavoriteClick(event) {
     event.stopPropagation();
     onToggleFavorite(movie);
   }
 
+  function handlePointerDown(event) {
+    // Only activate this special state
+    // for touch / pen devices.
+    if (
+      event.pointerType === "touch" ||
+      event.pointerType === "pen"
+    ) {
+      setTouching(true);
+    }
+  }
+
+  function handlePointerUp() {
+    setTouching(false);
+  }
+
+  function handlePointerCancel() {
+    setTouching(false);
+  }
+
+  function handlePointerLeave() {
+    setTouching(false);
+  }
+
   return (
     <div
-      className="movie-card"
+      className={`movie-card ${
+        touching ? "movie-card-touching" : ""
+      }`}
       onClick={() => onOpen(movie)}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
+      onPointerLeave={handlePointerLeave}
     >
       <div className="poster-wrapper">
         <img
@@ -797,6 +938,5 @@ function MovieCard({
     </div>
   );
 }
-
 
 export default App;

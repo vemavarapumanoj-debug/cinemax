@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">CineMax</string>
+    <string name="title_activity_main">CineMax</string>
+    <string name="package_name">com.cinemax.movies</string>
+    <string name="custom_url_scheme">com.cinemax.movies</string>
+</resources>
